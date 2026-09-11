@@ -10,7 +10,7 @@ pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 600, 600
 SQUARE_SIZE = 50
 SQUARE_COLOR = (255, 0, 0)  # Red
-SQUARE_SPEED = 300
+SQUARE_SPEED = 30000000000000000
 
 FPS = 60  # Frames per second
 
@@ -42,7 +42,7 @@ while running:
 
     # Check for screen bounds and reverse direction if necessary
     if x + SQUARE_SIZE > SCREEN_WIDTH:
-        direction = -1  # Move left
+        direction = -1 # Move left
     elif x < 0:
         direction = 1  # Move right
 

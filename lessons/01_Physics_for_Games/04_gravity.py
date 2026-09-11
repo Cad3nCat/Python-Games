@@ -27,7 +27,7 @@ class GameSettings:
     player_size: int = 10
     player_x: int = 100 # Initial x position of the player
    
-    jump_velocity: int = 200
+    jump_velocity: int = 400
     white: tuple = (255, 255, 255)
     black: tuple = (0, 0, 0)
 

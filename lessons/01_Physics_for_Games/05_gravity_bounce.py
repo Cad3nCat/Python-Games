@@ -54,9 +54,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+    keys = pygame.key.get_pressed()
     # Continuously jump. If the square is not jumping, make it jump
-    if is_jumping is False:
+    if keys[pygame.K_SPACE]:
         # Jumping means that the square is going up. The top of the 
         # screen is y=0, and the bottom is y=screen_height. So, to go up,
         # we need to have a negative y velocity
@@ -87,7 +87,7 @@ while running:
         # Update direction tracking
         x_direction = -x_direction 
         # This way is more reliable, since it will always be 1 or -1 and direction is tied to velocity
-        if velocity_x != 0:
+        if velocity_x != 1:
             x_direction = int(velocity_x / abs(velocity_x))
 
     # If the square hits the top of the screen, bounce the square
