@@ -21,13 +21,18 @@ Player class!), of different colors, bouncing around in different trajectories.
 
 """
 import pygame
+import random
 
 
 class Colors:
     """Constants for Colors"""
+
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     RED = (255, 0, 0)
+    PURPLE = (250, 0, 221)
+    ORANGE = (245, 124, 2)
+    BLUE = (0, 0, 255)
 
 
 class GameSettings:
@@ -38,11 +43,11 @@ class GameSettings:
     player_height: int = 20
 
     player_start_x: int = 100
-    player_start_y: int = None
+    player_start_y: int = 100
 
     gravity: float = 200
-    v_0_y: float = 0  # Initial y velocity
-    v_0_x: float = 75 # Initial x velocity
+    v_0_y: float = 75  # Initial y velocity
+    v_0_x: float = None # Initial x velocity
 
     jump_v_y: float = 400
 
@@ -93,7 +98,7 @@ class Game:
 class Player:
     """Player class, just a bouncing rectangle"""
 
-    def __init__(self, game: Game):
+    def __init__(self, Colors, game: Game):
         self.game = game
         settings = game.settings
 
@@ -103,11 +108,13 @@ class Player:
         self.is_jumping = False
         self.v_jump = settings.jump_v_y
 
-        self.y = settings.player_start_y if settings.player_start_y is not None else settings.height - self.height
-        self.x = settings.player_start_x
+        self.y = settings.player_start_y if settings.player_start_y is not None else (settings.height - self.height)+random.randint(0, 150)
+        self.x = settings.player_start_x+random.randint(0, 150)
         
-        self.v_x = settings.v_0_x  # X Velocity
-        self.v_y = settings.v_0_y  # Y Velocity
+        self.v_x = settings.v_0_x+random.uniform(-150.0, 150.0) # X Velocity
+        self.v_y = settings.v_0_y+random.uniform(-150.0, 150.0)  # Y Velocity
+
+        self.color = Colors
 
     def update(self):
         """Update player position, continuously jumping"""
@@ -144,14 +151,20 @@ class Player:
             self.is_jumping = True
 
     def draw(self, screen):
-        pygame.draw.rect(screen, Colors.BLACK, (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
 
 settings = GameSettings()
 game = Game(settings)
 
-p1 = Player(game)
+p1 = Player(Colors.RED, game)
 game.add_player(p1)
-
-
+p2 = Player(Colors.BLACK, game)
+game.add_player(p2)
+p4 = Player(Colors.ORANGE, game)
+game.add_player(p4)
+p5 = Player(Colors.PURPLE, game)
+game.add_player(p5)
+p6 = Player(Colors.BLUE, game)
+game.add_player(p6)
 game.run()
