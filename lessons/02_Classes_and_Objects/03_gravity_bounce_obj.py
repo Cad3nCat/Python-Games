@@ -43,13 +43,13 @@ class GameSettings:
     player_height: int = 20
 
     player_start_x: int = 100
-    player_start_y: int = 100
+    player_start_y: int = None
 
     gravity: float = 200
     v_0_y: float = 75  # Initial y velocity
-    v_0_x: float = None # Initial x velocity
+    v_0_x: float = 0 # Initial x velocity
 
-    jump_v_y: float = 400
+    jump_v_y: float = 500
 
     FPS = 30
     d_t = 1 / FPS # Time step
@@ -98,7 +98,7 @@ class Game:
 class Player:
     """Player class, just a bouncing rectangle"""
 
-    def __init__(self, Colors, game: Game):
+    def __init__(self, color, game: Game):
         self.game = game
         settings = game.settings
 
@@ -108,13 +108,13 @@ class Player:
         self.is_jumping = False
         self.v_jump = settings.jump_v_y
 
-        self.y = settings.player_start_y if settings.player_start_y is not None else (settings.height - self.height)+random.randint(0, 150)
+        self.y = settings.player_start_y if settings.player_start_y is not None else (settings.height - self.height)-random.randint(0, 500)
         self.x = settings.player_start_x+random.randint(0, 150)
         
         self.v_x = settings.v_0_x+random.uniform(-150.0, 150.0) # X Velocity
         self.v_y = settings.v_0_y+random.uniform(-150.0, 150.0)  # Y Velocity
 
-        self.color = Colors
+        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def update(self):
         """Update player position, continuously jumping"""
@@ -126,7 +126,9 @@ class Player:
         """Update the player's y position based on gravity and velocity"""
         self.v_y += self.game.settings.gravity * self.game.settings.d_t # Add gravity to the y velocity
         self.y += self.v_y * self.game.settings.d_t # Update the player's y position, based on the current velocity
-
+        if self.y < 0:
+            self.y = 0
+            self.v_y = -self.v_y
         if self.y >= self.game.settings.height - self.height:
             self.y = self.game.settings.height - self.height
             self.v_y = 0
@@ -157,14 +159,10 @@ class Player:
 settings = GameSettings()
 game = Game(settings)
 
-p1 = Player(Colors.RED, game)
-game.add_player(p1)
-p2 = Player(Colors.BLACK, game)
-game.add_player(p2)
-p4 = Player(Colors.ORANGE, game)
-game.add_player(p4)
-p5 = Player(Colors.PURPLE, game)
-game.add_player(p5)
-p6 = Player(Colors.BLUE, game)
-game.add_player(p6)
+numberOfSquares = random.randint(10, 5000)
+print(numberOfSquares)
+for _ in range(10):
+    p1 = Player(Colors.RED, game)
+    game.add_player(p1)
+
 game.run()

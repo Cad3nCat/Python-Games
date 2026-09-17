@@ -11,7 +11,7 @@ class Settings:
     triangle_size = 20
     projectile_speed = 5
     projectile_size = 11
-    shoot_delay = 250  # 250 milliseconds between shots, or 4 shots per second
+    shoot_delay = 0  # 250 milliseconds between shots, or 4 shots per second
     colors = {"white": (255, 255, 255), "black": (0, 0, 0), "red": (255, 0, 0)}
 
 
@@ -86,7 +86,9 @@ class Spaceship(pygame.sprite.Sprite):
     def update(self):
         
         keys = pygame.key.get_pressed()
-
+        if keys[pygame.K_UP]:
+            print(self.angle)
+            self.velocity = pygame.Vector2(0, -1).rotate(self.angle) 
         if keys[pygame.K_LEFT]:
             self.angle -= 5
 
