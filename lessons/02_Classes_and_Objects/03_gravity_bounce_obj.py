@@ -111,8 +111,8 @@ class Player:
         self.y = settings.player_start_y if settings.player_start_y is not None else (settings.height - self.height)-random.randint(0, 500)
         self.x = settings.player_start_x+random.randint(0, 150)
         
-        self.v_x = settings.v_0_x+random.uniform(-150.0, 150.0) # X Velocity
-        self.v_y = settings.v_0_y+random.uniform(-150.0, 150.0)  # Y Velocity
+        self.v_x = settings.v_0_x+random.uniform(-1000000.0, 1000000.0) # X Velocity
+        self.v_y = settings.v_0_y+random.uniform(-1000000.0, 1000000.0)  # Y Velocity
 
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
@@ -159,9 +159,9 @@ class Player:
 settings = GameSettings()
 game = Game(settings)
 
-numberOfSquares = random.randint(10, 5000)
+numberOfSquares = random.randint(100, 1000)
 print(numberOfSquares)
-for _ in range(10):
+for _ in range(numberOfSquares):
     p1 = Player(Colors.RED, game)
     game.add_player(p1)
 

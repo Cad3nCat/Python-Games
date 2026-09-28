@@ -6,6 +6,8 @@ obstacles. The game should end when the player collides with an obstacle ...
 but it does not. It's a work in progress, and you'll have to finish it. 
 
 """
+import time
+
 import pygame
 import random
 from pathlib import Path
@@ -44,6 +46,7 @@ font = pygame.font.SysFont(None, 36)
 
 # Define an obstacle class
 class Obstacle(pygame.sprite.Sprite):
+
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
@@ -79,13 +82,20 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = 50
         self.rect.y = HEIGHT - PLAYER_SIZE - 10
         self.speed = player_speed
+        self.velocity = 0
 
     def update(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            self.rect.y -= self.speed
-        if keys[pygame.K_DOWN]:
-            self.rect.y += self.speed
+        if self.velocity == 0:
+            if keys[pygame.K_SPACE]:
+                self.velocity += 1000
+                print(self.velocity)
+                self.rect.y = self.velocity
+        if self.velocity >= 0:
+            self.velocity += -1
+            self.rect.y -= self.velocity
+                
+        
 
         # Keep the player on screen
         if self.rect.top < 0:
