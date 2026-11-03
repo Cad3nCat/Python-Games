@@ -54,15 +54,16 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH
         self.rect.y = HEIGHT - OBSTACLE_HEIGHT - 10
+        
 
         self.explosion = pygame.image.load(images_dir / "explosion1.gif")
 
-    def update(self):
+    def update(self, player):
         self.rect.x -= obstacle_speed
         # Remove the obstacle if it goes off screen
         if self.rect.right < 0:
             self.kill()
-
+        player.score+=1
     def explode(self):
         """Replace the image with an explosition image."""
         
@@ -83,25 +84,29 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = HEIGHT - PLAYER_SIZE - 10
         self.speed = player_speed
         self.velocity = 0
-
+        self.jumping = False
+        self.score = 0
     def update(self):
+        print(self.velocity)
+    
         keys = pygame.key.get_pressed()
-        if self.velocity == 0:
+        if self.jumping == False:
             if keys[pygame.K_SPACE]:
-                self.velocity += 1000
+                self.jumping = True
+                self.velocity += 15
                 print(self.velocity)
-                self.rect.y = self.velocity
-        if self.velocity >= 0:
+                #self.rect.y = self.velocity
+        if self.jumping == True:
             self.velocity += -1
             self.rect.y -= self.velocity
-                
-        
+            
 
         # Keep the player on screen
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
+            self.jumping = False
 
 # Create a player object
 player = Player()
@@ -136,6 +141,7 @@ def game_loop():
 
     obstacle_count = 0
 
+
     while not game_over:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -144,13 +150,13 @@ def game_loop():
 
         # Update player
         player.update()
-
+     
         # Add obstacles and update
         if pygame.time.get_ticks() - last_obstacle_time > 500:
             last_obstacle_time = pygame.time.get_ticks()
             obstacle_count += add_obstacle(obstacles)
         
-        obstacles.update()
+        obstacles.update(player)
 
         # Check for collisions
         collider = pygame.sprite.spritecollide(player, obstacles, dokill=False)
@@ -165,6 +171,10 @@ def game_loop():
         # Display obstacle count
         obstacle_text = font.render(f"Obstacles: {obstacle_count}", True, BLACK)
         screen.blit(obstacle_text, (10, 10))
+
+
+        obstacle_text = font.render(f"Score: {player.score}", True, BLACK)
+        screen.blit(obstacle_text, (300, 10))
 
         pygame.display.update()
         clock.tick(FPS)
