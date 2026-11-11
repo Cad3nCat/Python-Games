@@ -159,7 +159,7 @@ class Player:
 settings = GameSettings()
 game = Game(settings)
 
-numberOfSquares = random.randint(100, 1000)
+numberOfSquares = random.randint(1000, 5000)
 print(numberOfSquares)
 for _ in range(numberOfSquares):
     p1 = Player(Colors.RED, game)

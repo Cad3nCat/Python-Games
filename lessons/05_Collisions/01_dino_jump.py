@@ -10,6 +10,7 @@ import time
 
 import pygame
 import random
+import sys
 from pathlib import Path
 
 # Initialize Pygame
@@ -26,6 +27,7 @@ pygame.display.set_caption("Dino Jump")
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+RED = (255, 0, 0)
 
 # FPS
 FPS = 60
@@ -54,16 +56,20 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH
         self.rect.y = HEIGHT - OBSTACLE_HEIGHT - 10
-        
+
 
         self.explosion = pygame.image.load(images_dir / "explosion1.gif")
 
+
+
+
     def update(self, player):
+
         self.rect.x -= obstacle_speed
         # Remove the obstacle if it goes off screen
         if self.rect.right < 0:
             self.kill()
-        player.score+=1
+            player.score+=1
     def explode(self):
         """Replace the image with an explosition image."""
         
@@ -71,6 +77,16 @@ class Obstacle(pygame.sprite.Sprite):
         self.image = self.explosion
         self.image = pygame.transform.scale(self.image, (OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
         self.rect = self.image.get_rect(center=self.rect.center)
+        pygame.quit()
+        prompt_font = pygame.font.SysFont(None, 36)
+        prompt_text = prompt_font.render("Try Again? Press Y for Yes or N for No", True, (0, 0, 0))
+        prompt_rect = prompt_text.get_rect(center=(300, 230))
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_y]:
+            game_loop()
+        elif keys[pygame.K_n]:
+            pygame.quit()
+            sys.exit()
 
 
 # Define a player class
@@ -172,7 +188,7 @@ def game_loop():
         obstacle_text = font.render(f"Obstacles: {obstacle_count}", True, BLACK)
         screen.blit(obstacle_text, (10, 10))
 
-
+        # Display score count
         obstacle_text = font.render(f"Score: {player.score}", True, BLACK)
         screen.blit(obstacle_text, (300, 10))
 
